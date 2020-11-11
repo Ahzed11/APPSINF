@@ -1,0 +1,46 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+  <section class="hero is-medium is-dark">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Petite phrase d'accroche
+        </h1>
+        <h2 class="subtitle">
+          Phrase qui répond / complète la première
+        </h2>
+      </div>
+    </div>
+  </section>
+  <section class="container mt-6">
+    <div class="columns">
+      <section class="column is-5">
+        <h2 class="title is-3">Articles récents</h2>
+        {% include 'components/articlePreview.twig' %}
+        {% include 'components/articlePreview.twig' %}
+        {% include 'components/articlePreview.twig' %}
+        {% include 'components/articlePreview.twig' %}
+        {% include 'components/articlePreview.twig' %}
+      </section>
+      <section class="column is-offset-2">
+        <h2 class="title is-3">Tags populaires</h2>
+        <div class="tags">
+          <span class="tag">One</span>
+          <span class="tag">Two</span>
+          <span class="tag">Three</span>
+          <span class="tag">One</span>
+          <span class="tag">Two</span>
+          <span class="tag">Three</span>
+          <span class="tag">One</span>
+          <span class="tag">Two</span>
+          <span class="tag">Three</span>
+        </div>
+
+        <h2 class="title is-3">Articles populaires</h2>
+        {% include 'components/articlePreview.twig' %}
+        {% include 'components/articlePreview.twig' %}
+      </section>
+    </div>
+  </section>
+{% endblock %}

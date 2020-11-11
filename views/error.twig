@@ -1,0 +1,14 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+  <div class="container">
+    <div class="message is-danger">
+      <div class="message-header">
+        <p>{{error.status}} - {{message}}</p>
+      </div>
+      <div class="message-body">
+        <pre>{{error.stack}}</pre>
+      </div>
+    </div>
+  </div>
+{% endblock %}
