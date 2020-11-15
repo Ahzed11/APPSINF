@@ -27,12 +27,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//TODO: Changer le nom de la db quand on aura le nom du projet
 mongoose.connect('mongodb://localhost/report', { useNewUrlParser: true });
 const db = mongoose.connection;
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/article', articleRouter);
+
+//TODO: HTTPS
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

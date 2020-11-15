@@ -1,0 +1,59 @@
+{% extends 'layout.twig' %}
+
+{% block header %}
+{{ parent() }}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+{% endblock %}
+
+{% block body %}
+  <div class="container mt-6">
+    <div class="columns">
+      <section class="column is-6 is-offset-3">
+        <h1 class="title is-3 has-text-centered">Écrire un article</h1>
+        <form method="post" action="/article/write">
+          <div class="field">
+            <label class="label">Titre</label>
+            <div class="control has-icons-left">
+              <input class="input" type="text" name="article-write-title" placeholder="Titre">
+              <span class="icon is-small is-left">
+                  <i class="fas fa-pen"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Contenu</label>
+            <div class="control">
+              <textarea id="md-editor" name="article-write-content" class="textarea" rows="20"></textarea>
+            </div>
+          </div>
+
+          <input type="hidden" class="input" />
+
+          <div class="field">
+            <label class="label">Tags</label>
+            <div class="control has-icons-left">
+              <input class="input" type="text" name="article-write-tags" placeholder="Tags, séparés par une virgule">
+              <span class="icon is-small is-left">
+                  <i class="fas fa-tag"></i>
+              </span>
+            </div>
+          </div>
+
+          <button type="submit" class="button is-dark is-fullwidth">Publier</button>
+        </form>
+      </section>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascripts%}
+  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+  <script>
+    let simplemde = new SimpleMDE({
+      element: document.getElementById("md-editor"),
+      spellChecker: false,
+      toolbar: [],
+      placeholder: "Le contenu en MarkDown" });
+  </script>
+{% endblock %}

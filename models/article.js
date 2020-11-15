@@ -5,10 +5,13 @@ const articleSchema = new mongoose.Schema({
     title: {
         type: String,
     },
-    description: {
+    content: {
         type: String,
     },
     tags: {
+        type: String,
+    },
+    slug: {
         type: String,
     },
     author: {
@@ -21,7 +24,7 @@ const articleSchema = new mongoose.Schema({
     },
 });
 
-articleSchema.index({title: 'text', description: 'text', tags: 'text'});
+articleSchema.index({title: 'text', content: 'text', tags: 'text'});
 
 const Article = mongoose.model('Article', articleSchema);
 
