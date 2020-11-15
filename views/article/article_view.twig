@@ -5,16 +5,23 @@
     <div class="columns">
       <section class="column is-offset-3 is-6">
         <article>
-          <h1 class="title is-2 has-text-centered has-font-weight-bold">Titre de l'article</h1>
-          <h2 class="subtitle is-5 has-text-centered">Prénom Nom</h2>
-          <div class="content has-text-justified">
-            <h1>Title</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sollicitudin nunc at mauris iaculis pharetra in non tortor. Maecenas non venenatis orci, vitae sodales dui. Integer luctus purus mi, ut rhoncus odio tincidunt bibendum. Nulla sit amet sem bibendum, tempor quam non, aliquet elit. Sed sagittis dignissim nisi, in bibendum sapien ultrices id. Nunc euismod velit eget diam pharetra volutpat. Proin malesuada eget massa ut imperdiet. Cras felis ex, pulvinar eu sagittis non, commodo in ligula. Vivamus porta libero purus, vel elementum quam imperdiet sit amet. Mauris fringilla elit diam, at molestie neque cursus sed. Integer quis ligula et metus auctor ultricies sit amet quis dui. Duis eu fermentum ligula. Praesent facilisis cursus imperdiet. Fusce suscipit quam at est scelerisque, ut accumsan lectus lacinia. Aliquam tincidunt viverra diam ut sodales. </p>
-
-            <h2>Title 2</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sollicitudin nunc at mauris iaculis pharetra in non tortor. Maecenas non venenatis orci, vitae sodales dui. Integer luctus purus mi, ut rhoncus odio tincidunt bibendum. Nulla sit amet sem bibendum, tempor quam non, aliquet elit. Sed sagittis dignissim nisi, in bibendum sapien ultrices id. Nunc euismod velit eget diam pharetra volutpat. Proin malesuada eget massa ut imperdiet. Cras felis ex, pulvinar eu sagittis non, commodo in ligula. Vivamus porta libero purus, vel elementum quam imperdiet sit amet. Mauris fringilla elit diam, at molestie neque cursus sed. Integer quis ligula et metus auctor ultricies sit amet quis dui. Duis eu fermentum ligula. Praesent facilisis cursus imperdiet. Fusce suscipit quam at est scelerisque, ut accumsan lectus lacinia. Aliquam tincidunt viverra diam ut sodales. </p>
-          </div>
+          <h1 class="title is-2 has-text-centered has-font-weight-bold">{{ article.title }}</h1>
+          <div id="content" class="content has-text-justified">{{ article.content }}</div>
         </article>
+        <section class="mt-6">
+          <div class="level">
+            <div class="level-left">
+              <p class="title is-5">{{ article.author.firstName }} {{ article.author.lastName }}</p>
+            </div>
+            <div class="level-right">
+              <div class="tags">
+                {% for tag in article.tags | split(',') %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </section>
         <hr>
         <section class="mt-6">
           <div class="level">
@@ -36,11 +43,11 @@
           </div>
         </section>
         <section class="mt-5">
-          {% include './components/comment.twig' %}
-          {% include './components/comment.twig' %}
-          {% include './components/comment.twig' %}
-          {% include './components/comment.twig' %}
-          {% include './components/comment.twig' %}
+          {% include '../components/comment.twig' %}
+          {% include '../components/comment.twig' %}
+          {% include '../components/comment.twig' %}
+          {% include '../components/comment.twig' %}
+          {% include '../components/comment.twig' %}
         </section>
         <form class="mt-5" method="post" action="">
           <h2 class="title is-3">
@@ -59,4 +66,17 @@
       </section>
     </div>
   </div>
+{% endblock %}
+
+{% block javascripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+  <script>
+    let converter = new showdown.Converter();
+    let contentDiv = document.getElementById('content');
+    let text      = contentDiv.innerHTML;
+    console.log(text);
+    let html      = converter.makeHtml(text);
+    console.log(html);
+    contentDiv.innerHTML = html;
+  </script>
 {% endblock %}
