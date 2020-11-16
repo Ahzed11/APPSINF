@@ -4,11 +4,14 @@ const User = require('../models/user');
 const Article = require('../models/article');
 const createUUID = require('../helpers/createUUID');
 const createError = require("http-errors");
+const showdown = require('showdown')
 
 /* GET view page. */
 router.get('/view/:slug', async function(req, res, next) {
     const article = await Article.findOne({slug: req.params.slug}).populate('author');
     if (article){
+        const converter = new showdown.Converter();
+        article.content = converter.makeHtml(article.content);
         res.render('article/article_view', {userName: req.session.userName, article: article});
     } else {
         next(createError(404));

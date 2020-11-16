@@ -67,16 +67,3 @@
     </div>
   </div>
 {% endblock %}
-
-{% block javascripts %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
-  <script>
-    let converter = new showdown.Converter();
-    let contentDiv = document.getElementById('content');
-    let text      = contentDiv.innerHTML;
-    console.log(text);
-    let html      = converter.makeHtml(text);
-    console.log(html);
-    contentDiv.innerHTML = html;
-  </script>
-{% endblock %}
