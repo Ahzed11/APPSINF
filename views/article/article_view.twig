@@ -43,26 +43,38 @@
           </div>
         </section>
         <section class="mt-5">
-          {% include '../components/comment.twig' %}
-          {% include '../components/comment.twig' %}
-          {% include '../components/comment.twig' %}
-          {% include '../components/comment.twig' %}
-          {% include '../components/comment.twig' %}
+          {% for comment in article.comments %}
+            {% include '../components/comment.twig' with {'comment': comment}%}
+          {% endfor %}
         </section>
-        <form class="mt-5" method="post" action="">
-          <h2 class="title is-3">
-            Poster un commentaire
-          </h2>
-          <textarea class="textarea" placeholder="e.g. Hello world"></textarea>
-          <button type="submit" class="button is-dark is-fullwidth mt-3">
+        {% if userName != null%}
+          <form class="mt-5" method="post">
+            <h2 class="title is-3">
+              Poster un commentaire
+              {{ userName }}
+            </h2>
+            <textarea name="comment-write-content" class="textarea" placeholder="Votre commentaire"></textarea>
+            <button type="submit" class="button is-dark is-fullwidth mt-3">
             <span class="icon">
                 <i class="fas fa-paper-plane"></i>
             </span>
-            <span>
+              <span>
                 Poster
             </span>
-          </button>
-        </form>
+            </button>
+          </form>
+        {% else %}
+          <section class="hero is-small is-dark mt-5">
+            <div class="hero-body">
+              <div class="container">
+                <h1 class="title has-text-centered">
+                  Connectez-vous pour écrire un commentaire
+                </h1>
+                <a href="/auth" class="button is-fullwidth">Se connecter</a>
+              </div>
+            </div>
+          </section>
+       {% endif %}
       </section>
     </div>
   </div>

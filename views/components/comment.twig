@@ -2,9 +2,10 @@
     <div class="media-content">
         <div class="content has-text-justified">
             <p class="">
-                <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
+                <strong>{{ comment.author.firstName }} {{ comment.author.lastName }}</strong>
+                <small>{{ comment.createdAt | date }}</small>
                 <br>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                {{ comment.content }}
             </p>
         </div>
     </div>
