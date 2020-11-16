@@ -1,38 +1,37 @@
 <article class="card mb-6">
     <div class="card-content">
-        <div class="media">
+        <section class="media">
             <div class="media-content">
-                <p class="title is-4 mb-0">TITLE</p>
+                <p class="title is-4 mb-0">{{ article.title }}</p>
 
                 <div class="level mt-0 pt-0">
                     <div class="level-left">
-                        <p class="subtitle is-6">@username</p>
+                        <p class="subtitle is-6">{{ article.author.firstName }} {{ article.author.lastName }}</p>
                     </div>
                     <div class="level-right">
                         <div class="tags">
-                            <span class="tag">One</span>
-                            <span class="tag">Two</span>
-                            <span class="tag">Three</span>
+                            {% for tag in article.tags | split(',')%}
+                                <span class="tag">{{ tag  }}</span>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="content">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Phasellus nec iaculis mauris.
+        <section>
+            <p class="mb-5">
+                {{ article.shortDescription }}
             </p>
 
             <div class="level">
                 <div class="level-left">
-                    <time class="has-text-weight-bold" datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                    <time class="has-text-weight-bold">{{ article.createdAt | date }}</time>
                 </div>
                 <div class="level-right">
-                    <a class="button is-dark">Voir l'article</a>
+                    <a class="button is-dark" href="/article/view/{{ article.slug }}">Voir l'article</a>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </article>

@@ -17,11 +17,9 @@
     <div class="columns">
       <section class="column is-5">
         <h2 class="title is-3">Articles récents</h2>
-        {% include 'components/articlePreview.twig' %}
-        {% include 'components/articlePreview.twig' %}
-        {% include 'components/articlePreview.twig' %}
-        {% include 'components/articlePreview.twig' %}
-        {% include 'components/articlePreview.twig' %}
+        {% for article in articles %}
+          {% include 'components/articlePreview.twig' with {'article': article}%}
+        {% endfor %}
       </section>
       <section class="column is-offset-2">
         <h2 class="title is-3">Tags populaires</h2>

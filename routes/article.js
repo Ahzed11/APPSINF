@@ -36,6 +36,7 @@ router.post('/write', function(req, res, next) {
 
             article.title = req.body['article-write-title'];
             article.content = req.body['article-write-content'];
+            article.shortDescription = req.body['article-write-short-description']
             article.tags = req.body['article-write-tags'];
 
             //TODO: Améliorer la création du slug
@@ -43,8 +44,9 @@ router.post('/write', function(req, res, next) {
             article.slug = slug;
             article.author = user;
 
-            article.save();
-            res.redirect(`/article/view/${slug}`);
+            article.save().then(() => {
+                res.redirect(`/article/view/${slug}`);
+            });
             return;
         }
 

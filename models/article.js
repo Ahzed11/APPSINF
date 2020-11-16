@@ -8,11 +8,16 @@ const articleSchema = new mongoose.Schema({
     content: {
         type: String,
     },
+    shortDescription: {
+        type: String,
+    },
     tags: {
         type: String,
     },
     slug: {
         type: String,
+        unique: true,
+        index: true,
     },
     author: {
         type: mongoose.Schema.Types.ObjectId,
