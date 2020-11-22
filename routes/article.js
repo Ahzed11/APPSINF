@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const Article = require('../models/article');
-const Comment = require('../models/comment');
+const Comment = require('../schemas/comment');
 const createUUID = require('../helpers/createUUID');
 const createError = require("http-errors");
 const showdown = require('showdown')
@@ -22,7 +22,7 @@ router.get('/view/:slug', async function(req, res, next) {
 });
 
 /* POST view page. */
-router.post('/view/:slug', async function(req, res, next) {
+router.post('/comment/:slug', async function(req, res, next) {
     const article = await Article.findOne({slug: req.params.slug});
     if (article){
         User.findOne({userName: req.session.userName}, (err, user) => {
@@ -35,13 +35,40 @@ router.post('/view/:slug', async function(req, res, next) {
     res.redirect(`/article/view/${req.params.slug}`);
 });
 
+/* POST view page. */
+router.post('/reaction/:slug', async function(req, res, next) {
+    const reactions = ['heart_eyes', 'joy', 'smile', 'face_with_raised_eyebrow', 'cry', 'angry'];
+    const reaction = req.body['reaction-write-content'];
+
+    if (reactions.find((e) => e === reaction)) {
+        const article = await Article.findOne({slug: req.params.slug});
+        if (article){
+            User.findOne({userName: req.session.userName}, (err, user) => {
+                if (user){
+                    const previousReactionIndex = article.reactions.findIndex((e) => {
+                        return  e.author.toString() === user['_id'].toString();
+                    });
+                    if (previousReactionIndex >= 0) {
+                        article.reactions.splice(previousReactionIndex, 1);
+                    }
+
+                    article.reactions.push({content: reaction, author: user});
+                    article.save();
+                }
+            });
+        }
+    }
+
+    res.redirect(`/article/view/${req.params.slug}`);
+});
+
 /* GET write page. */
 router.get('/write', function(req, res, next) {
     if (req.session.userName){
         res.render('article/article_write', {userName: req.session.userName});
-        return;
+    } else {
+        res.redirect('/auth');
     }
-    res.redirect('/auth');
 });
 
 /* POST write page. */

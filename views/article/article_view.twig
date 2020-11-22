@@ -31,27 +31,121 @@
               </h2>
             </div>
             <div class="level-right">
-              <a class="button is-danger">
-                <span class="icon">
-                    <i class="fas fa-heart"></i>
-                </span>
-                <span>
-                    Like
-                </span>
-              </a>
+              <form method="post" action="/article/reaction/{{ article.slug }}">
+                <input type="hidden" name="reaction-write-content" value="heart_eyes">
+                <button type="submit" class="button is-rounded px-4">
+                  <span>
+                    {% set counter = 0 %}
+                    {% for reaction in article.reactions %}
+                      {% if reaction.content == 'heart_eyes' %}
+                        {% set counter = counter + 1 %}
+                      {% endif %}
+                    {% endfor %}
+                    {{ counter }}
+                  </span>
+                  <span class="icon">
+                      <i class="em em-heart_eyes" aria-label="SMILING FACE WITH HEART-SHAPED EYES"></i>
+                  </span>
+                </button>
+              </form>
+              <form method="post" action="/article/reaction/{{ article.slug }}">
+                <input type="hidden" name="reaction-write-content" value="joy">
+                <button type="submit" class="button is-rounded px-4">
+                  <span>
+                    {% set counter = 0 %}
+                    {% for reaction in article.reactions %}
+                      {% if reaction.content == 'joy' %}
+                        {% set counter = counter + 1 %}
+                      {% endif %}
+                    {% endfor %}
+                    {{ counter }}
+                  </span>
+                  <span class="icon">
+                      <i class="em em-joy" aria-label="FACE WITH TEARS OF JOY"></i>
+                  </span>
+                </button>
+              </form>
+              <form method="post" action="/article/reaction/{{ article.slug }}">
+                <input type="hidden" name="reaction-write-content" value="smile">
+                <button type="submit" class="button is-rounded px-4">
+                  <span>
+                    {% set counter = 0 %}
+                    {% for reaction in article.reactions %}
+                      {% if reaction.content == 'smile' %}
+                        {% set counter = counter + 1 %}
+                      {% endif %}
+                    {% endfor %}
+                    {{ counter }}
+                  </span>
+                  <span class="icon">
+                      <i class="em em-smile" aria-label="SMILING FACE WITH OPEN MOUTH AND SMILING EYES"></i>
+                  </span>
+                </button>
+              </form>
+              <form method="post" action="/article/reaction/{{ article.slug }}">
+                <input type="hidden" name="reaction-write-content" value="face_with_raised_eyebrow">
+                <button type="submit" class="button is-rounded px-4">
+                  <span>
+                    {% set counter = 0 %}
+                    {% for reaction in article.reactions %}
+                      {% if reaction.content == 'face_with_raised_eyebrow' %}
+                        {% set counter = counter + 1 %}
+                      {% endif %}
+                    {% endfor %}
+                    {{ counter }}
+                  </span>
+                  <span class="icon">
+                      <i class="em em-face_with_raised_eyebrow" aria-label="FACE WITH ONE EYEBROW RAISED"></i>
+                  </span>
+                </button>
+              </form>
+              <form method="post" action="/article/reaction/{{ article.slug }}">
+                <input type="hidden" name="reaction-write-content" value="cry">
+                <button type="submit" class="button is-rounded px-4">
+                  <span>
+                    {% set counter = 0 %}
+                    {% for reaction in article.reactions %}
+                      {% if reaction.content == 'cry' %}
+                        {% set counter = counter + 1 %}
+                      {% endif %}
+                    {% endfor %}
+                    {{ counter }}
+                  </span>
+                  <span class="icon">
+                      <i class="em em-cry" aria-label="CRYING FACE"></i>
+                  </span>
+                </button>
+              </form>
+              <form method="post" action="/article/reaction/{{ article.slug }}">
+                <input type="hidden" name="reaction-write-content" value="angry">
+                <button type="submit" class="button is-rounded px-4">
+                  <span>
+                    {% set counter = 0 %}
+                    {% for reaction in article.reactions %}
+                      {% if reaction.content == 'angry' %}
+                        {% set counter = counter + 1 %}
+                      {% endif %}
+                    {% endfor %}
+                    {{ counter }}
+                  </span>
+                  <span class="icon">
+                      <i class="em em-angry" aria-label="ANGRY FACE"></i>
+                  </span>
+                </button>
+              </form>
             </div>
           </div>
         </section>
+
         <section class="mt-5">
           {% for comment in article.comments %}
             {% include '../components/comment.twig' with {'comment': comment}%}
           {% endfor %}
         </section>
         {% if userName != null%}
-          <form class="mt-5" method="post">
+          <form class="mt-5" method="post" action="/article/comment/{{ article.slug }}">
             <h2 class="title is-3">
               Poster un commentaire
-              {{ userName }}
             </h2>
             <textarea name="comment-write-content" class="textarea" placeholder="Votre commentaire"></textarea>
             <button type="submit" class="button is-dark is-fullwidth mt-3">

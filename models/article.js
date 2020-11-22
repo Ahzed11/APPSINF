@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('./user');
-const Comment = require('./comment');
+const Comment = require('../schemas/comment');
+const Reaction = require('../schemas/reaction');
 
 const articleSchema = new mongoose.Schema({
     title: {
@@ -29,6 +30,7 @@ const articleSchema = new mongoose.Schema({
         default:Date.now,
     },
     comments: [Comment],
+    reactions: [Reaction],
 });
 
 articleSchema.index({title: 'text', tags: 'text', shortDescription: 'text'});
