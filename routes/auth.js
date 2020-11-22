@@ -43,14 +43,21 @@ router.post('/register', (req, res) => {
 /* POST login page. */
 router.post('/login', (req, res) => {
     User.findOne({userName: req.body['login-user-name']}, (err, user) => {
-        if (user && bcrypt.compare(req.body['login-password'] , user.password)) {
-            req.session.userName = user.userName;
-            req.session.save();
+        if (user) {
+            bcrypt.compare(req.body['login-password'] , user.password)
+            .then((isValid) => {
+                if (isValid) {
+                    req.session.userName = user.userName;
+                    req.session.save();
 
-            res.redirect('/');
-            return
+                    res.redirect('/');
+                } else {
+                    res.redirect('/auth');
+                }
+            })
+        } else {
+            res.redirect('/auth');
         }
-        res.redirect('/auth');
     })
 });
 
