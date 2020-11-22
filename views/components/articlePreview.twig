@@ -11,7 +11,7 @@
                     <div class="level-right">
                         <div class="tags">
                             {% for tag in article.tags | split(',')%}
-                                <span class="tag">{{ tag  }}</span>
+                                <a href="/?searchTerm={{ tag }}" class="tag">{{ tag }}</a>
                             {% endfor %}
                         </div>
                     </div>

@@ -31,7 +31,7 @@ const articleSchema = new mongoose.Schema({
     comments: [Comment],
 });
 
-articleSchema.index({title: 'text', content: 'text', tags: 'text'});
+articleSchema.index({title: 'text', tags: 'text', shortDescription: 'text'});
 
 const Article = mongoose.model('Article', articleSchema);
 
