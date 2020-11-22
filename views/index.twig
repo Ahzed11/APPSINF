@@ -16,7 +16,15 @@
   <section class="container mt-6">
     <div class="columns">
       <section class="column is-5">
-        <h2 class="title is-3">Articles récents</h2>
+        {% if searchTerm == null or searchTerm == ''%}
+          <h2 class="title is-3">Articles récents</h2>
+        {% else %}
+          <h2 class="title is-3 mb-0">
+            Recherche: "{{ searchTerm }}"
+          </h2>
+          <a href="/" class="has-text-small has-text-weight-light has-text-dark pb-4 is-block">Supprimer la recherche</a>
+        {% endif %}
+
         {% for article in articles %}
           {% include 'components/articlePreview.twig' with {'article': article}%}
         {% endfor %}
