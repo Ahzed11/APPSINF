@@ -32,15 +32,11 @@
       <section class="column is-offset-2">
         <h2 class="title is-3">Tags populaires</h2>
         <div class="tags">
-          <span class="tag">One</span>
-          <span class="tag">Two</span>
-          <span class="tag">Three</span>
-          <span class="tag">One</span>
-          <span class="tag">Two</span>
-          <span class="tag">Three</span>
-          <span class="tag">One</span>
-          <span class="tag">Two</span>
-          <span class="tag">Three</span>
+          {% for tag in popularTags %}
+            {% if tag != '' %}
+              <span class="tag">{{ tag }}</span>
+            {% endif %}
+          {% endfor %}
         </div>
 
         <h2 class="title is-3">Articles populaires</h2>
