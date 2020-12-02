@@ -44,8 +44,9 @@
         </div>
 
         <h2 class="title is-3">Articles populaires</h2>
-        {% include 'components/articlePreview.twig' %}
-        {% include 'components/articlePreview.twig' %}
+        {% for article in popularArticles %}
+          {% include 'components/articlePreview.twig' with {'article': article}%}
+        {% endfor %}
       </section>
     </div>
   </section>
