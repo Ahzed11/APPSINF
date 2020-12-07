@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const { body, validationResult } = require('express-validator');
 
 const router = express.Router();
 
@@ -18,8 +19,47 @@ router.get('/logout', (req, res) => {
 });
 
 /* POST register page. */
-router.post('/register', (req, res) => {
-    //TODO: Add verification on fields
+router.post('/register',
+    [
+        body('register-username').isLength({min: 3})
+            .withMessage("Le nom d'utilisateur doit contenir au moins 3 caractères")
+            .custom(async (value,{req, loc, path}) => {
+                const user = await User.findOne({userName: req.body['register-username']});
+                if (user) {
+                    throw new Error("Ce nom d'utilisateur est déjà pris");
+                } else {
+                    return value;
+                }
+            }),
+        body('register-first-name').isLength({min: 2})
+            .withMessage("Le nom prénom doit contenir au moins 2 caractères"),
+        body('register-last-name').isLength({min: 2})
+            .withMessage("Le nom nom doit contenir au moins 2 caractères"),
+        body('register-email').isEmail().normalizeEmail()
+            .withMessage("L'adresse email doit être une adresse email valide")
+            .custom(async (value,{req, loc, path}) => {
+                const user = await User.findOne({email: req.body['register-email']});
+                if (user) {
+                    throw new Error("Cet email est déjà pris");
+                } else {
+                    return value;
+                }
+            }),
+        body('register-password').notEmpty().withMessage("Le mot de passe ne peut être vide")
+            .custom((value,{req, loc, path}) => {
+            if (value !== req.body['register-password-confirm']) {
+                throw new Error("Les mots de passe ne correspondent pas !");
+            } else {
+                return value;
+            }
+        }).withMessage("Le mot de passe doit correspondre à la confirmation")
+    ],
+    (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.render('auth', {userName: req.session.userName, errors: errors.array(), body: req.body});
+        return;
+    }
 
     const user = new User();
 
@@ -32,17 +72,21 @@ router.post('/register', (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     user.password = bcrypt.hashSync(req.body['register-password'], salt);
 
-    user.save();
+    user.save()
+        .then(() => {
+            req.session.userName = user.userName;
+            req.session.save();
 
-    req.session.userName = req.body['register-username'];
-    req.session.save();
-
-    res.redirect('/');
+            res.redirect('/');
+        })
+        .catch(() => {
+            res.redirect('/auth');
+        })
 });
 
 /* POST login page. */
 router.post('/login', (req, res) => {
-    User.findOne({userName: req.body['login-user-name']}, (err, user) => {
+    User.findOne({userName: req.body['login-username']}, (err, user) => {
         if (user) {
             bcrypt.compare(req.body['login-password'] , user.password)
             .then((isValid) => {

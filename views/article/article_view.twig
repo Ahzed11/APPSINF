@@ -6,12 +6,16 @@
       <section class="column is-offset-3 is-6">
         <article>
           <h1 class="title is-2 has-text-centered has-font-weight-bold">{{ article.title }}</h1>
+          <hr/>
           <div id="content" class="content has-text-justified">{{ article.content }}</div>
         </article>
         <section class="mt-6">
           <div class="level">
             <div class="level-left">
-              <p class="title is-5">{{ article.author.firstName }} {{ article.author.lastName }}</p>
+              <p class="title is-5">
+                {{ article.author.firstName }} {{ article.author.lastName }}
+                <span class="help">{{ article.createdAt | date }}</span>
+              </p>
             </div>
             <div class="level-right">
               <div class="tags">
@@ -147,7 +151,11 @@
             <h2 class="title is-3">
               Poster un commentaire
             </h2>
-            <textarea name="comment-write-content" class="textarea" placeholder="Votre commentaire"></textarea>
+            <div class="field">
+              <label class="label" for="comment-write-content">Commentaire</label>
+              <textarea name="comment-write-content" class="textarea" placeholder="Votre commentaire"></textarea>
+              <p class="help is-danger">{{ commentErrorMessage }}</p>
+            </div>
             <button type="submit" class="button is-dark is-fullwidth mt-3">
             <span class="icon">
                 <i class="fas fa-paper-plane"></i>

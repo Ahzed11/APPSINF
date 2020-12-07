@@ -11,7 +11,7 @@
                 <div class="field">
                     <label class="label">Identifiant</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" name="login-user-name" placeholder="Votre identifiant">
+                        <input class="input" type="text" name="login-username" placeholder="Votre identifiant">
                         <span class="icon is-small is-left">
                                 <i class="fas fa-user"></i>
                             </span>
@@ -40,37 +40,67 @@
                 <div class="field">
                     <label class="label">Identifiant</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" name="register-username" placeholder="Nouvel identifiant">
+                        <input class="input" type="text" name="register-username" placeholder="Nouvel identifiant"
+                               value="{{ body['register-username'] }}"
+                        >
                         <span class="icon is-small is-left">
                                 <i class="fas fa-user"></i>
                             </span>
                     </div>
+
+                    {% for error in errors %}
+                        {% if error.param == 'register-username' %}
+                            <p class="help is-danger">{{ error.msg }}</p>
+                        {% endif %}
+                    {% endfor %}
                 </div>
 
                 <label class="label">Prénom / Nom</label>
                 <div class="field is-grouped">
                     <div class="control has-icons-left is-expanded">
-                        <input class="input" type="text" name="register-first-name" placeholder="Votre prénom">
+                        <input class="input" type="text" name="register-first-name" placeholder="Votre prénom"
+                            value="{{ body['register-first-name'] }}"
+                        >
                         <span class="icon is-small is-left">
-                                <i class="fas fa-user"></i>
-                            </span>
+                            <i class="fas fa-user"></i>
+                        </span>
+                        {% for error in errors %}
+                            {% if error.param == 'register-first-name' %}
+                                <p class="help is-danger">{{ error.msg }}</p>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                     <div class="control has-icons-left is-expanded">
-                        <input class="input" type="text" name="register-last-name" placeholder="Votre nom">
+                        <input class="input" type="text" name="register-last-name" placeholder="Votre nom"
+                            value="{{ body['register-last-name'] }}"
+                        >
                         <span class="icon is-small is-left">
-                                <i class="fas fa-user"></i>
-                            </span>
+                            <i class="fas fa-user"></i>
+                        </span>
+                        {% for error in errors %}
+                            {% if error.param == 'register-last-name' %}
+                                <p class="help is-danger">{{ error.msg }}</p>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
 
                 <div class="field">
                     <label class="label">Adresse e-mail</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="email" name="register-email" placeholder="Votre adresse mail">
+                        <input class="input" type="email" name="register-email" placeholder="Votre adresse mail"
+                            value="{{ body['register-email'] }}"
+                        >
                         <span class="icon is-small is-left">
                                 <i class="fas fa-envelope"></i>
                             </span>
                     </div>
+
+                    {% for error in errors %}
+                        {% if error.param == 'register-email' %}
+                            <p class="help is-danger">{{ error.msg }}</p>
+                        {% endif %}
+                    {% endfor %}
                 </div>
 
                 <label class="label">Mot de passe</label>
@@ -78,14 +108,19 @@
                     <div class="control has-icons-left is-expanded">
                         <input class="input" type="password" name="register-password" placeholder="Votre mot de passe">
                         <span class="icon is-small is-left">
-                                <i class="fas fa-key"></i>
-                            </span>
+                            <i class="fas fa-key"></i>
+                        </span>
+                        {% for error in errors %}
+                            {% if error.param == 'register-password' %}
+                                <p class="help is-danger">{{ error.msg }}</p>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                     <div class="control has-icons-left is-expanded">
                         <input class="input" type="password" name="register-password-confirm" placeholder="Confirmation">
                         <span class="icon is-small is-left">
-                                <i class="fas fa-key"></i>
-                            </span>
+                            <i class="fas fa-key"></i>
+                        </span>
                     </div>
                 </div>
 

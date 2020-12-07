@@ -14,31 +14,50 @@
           <div class="field">
             <label class="label">Titre</label>
             <div class="control has-icons-left">
-              <input class="input" type="text" name="article-write-title" placeholder="Titre">
+              <input class="input" type="text" name="article-write-title" placeholder="Titre"
+                     value="{{ body['article-write-title'] }}"
+              >
               <span class="icon is-small is-left">
                   <i class="fas fa-pen"></i>
               </span>
+              {% for error in errors %}
+                {% if error.param == 'article-write-title' %}
+                  <p class="help is-danger">{{ error.msg }}</p>
+                {% endif %}
+              {% endfor %}
             </div>
           </div>
 
           <div class="field">
             <label class="label">Contenu</label>
             <div class="control">
-              <textarea id="md-editor" name="article-write-content" class="textarea" rows="20"></textarea>
+              <textarea id="md-editor" name="article-write-content" class="textarea" rows="20">{{ body['article-write-content'] }}</textarea>
             </div>
+            {% for error in errors %}
+              {% if error.param == 'article-write-content' %}
+                <p class="help is-danger">{{ error.msg }}</p>
+              {% endif %}
+            {% endfor %}
           </div>
 
           <div class="field">
             <label class="label">Courte Description</label>
             <div class="control">
-              <textarea name="article-write-short-description" class="textarea" rows="2" maxlength="150"></textarea>
+              <textarea name="article-write-short-description" class="textarea" rows="2" maxlength="150">{{ body['article-write-short-description'] }}</textarea>
             </div>
+            {% for error in errors %}
+              {% if error.param == 'article-write-short-description' %}
+                <p class="help is-danger">{{ error.msg }}</p>
+              {% endif %}
+            {% endfor %}
           </div>
 
           <div class="field">
             <label class="label">Tags</label>
             <div class="control has-icons-left">
-              <input class="input" type="text" name="article-write-tags" placeholder="Tags, séparés par une virgule">
+              <input class="input" type="text" name="article-write-tags" placeholder="Tags, séparés par une virgule"
+                value="{{ body['article-write-tags'] }}"
+              >
               <span class="icon is-small is-left">
                   <i class="fas fa-tag"></i>
               </span>
@@ -59,6 +78,7 @@
       element: document.getElementById("md-editor"),
       spellChecker: false,
       toolbar: [],
-      placeholder: "Le contenu en MarkDown" });
+      placeholder: "Le contenu en MarkDown",
+    });
   </script>
 {% endblock %}
