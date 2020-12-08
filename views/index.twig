@@ -34,7 +34,7 @@
         <div class="tags">
           {% for tag in popularTags %}
             {% if tag != '' %}
-              <span class="tag">{{ tag }}</span>
+              <a href="/?searchTerm={{ tag }}" class="tag">{{ tag }}</a>
             {% endif %}
           {% endfor %}
         </div>
