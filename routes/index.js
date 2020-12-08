@@ -7,11 +7,13 @@ router.get('/', async function(req, res, next) {
   // Articles
   let articles;
   const searchTerm = req.query.searchTerm;
+  const index = !req.query.index || req.query.index < 0 ? 0 : req.query.index;
 
   if(searchTerm){
-    articles = await Article.find({$text: {$search: searchTerm}}).populate('author').sort('-createdAt').limit(8);
+    articles = await Article.find({$text: {$search: searchTerm}}).populate('author').sort('-createdAt')
+        .skip(8 * index).limit(8);
   } else {
-    articles = await Article.find().populate('author').sort('-createdAt').limit(8);
+    articles = await Article.find().populate('author').sort('-createdAt').skip(8 * index).limit(8);
   }
 
   // Popular articles
@@ -33,7 +35,7 @@ router.get('/', async function(req, res, next) {
       }
     },
     { $sort: { "popularity": -1 } },
-    { $limit: 2 }
+    { $limit: 4 }
   ]);
 
   // Popular tags
@@ -62,7 +64,8 @@ router.get('/', async function(req, res, next) {
     articles: articles,
     popularArticles: popularArticles,
     popularTags: popularTags,
-    searchTerm: searchTerm
+    searchTerm: searchTerm,
+    index: index
   });
 });
 

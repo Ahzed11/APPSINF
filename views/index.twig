@@ -28,7 +28,19 @@
         {% for article in articles %}
           {% include 'components/articlePreview.twig' with {'article': article}%}
         {% endfor %}
+        <nav class="pagination" role="navigation" aria-label="pagination">
+          {% if index > 0 %}
+          <a href="/?index={{ index - 1 }}&searchTerm={{ searchTerm }}" class="pagination-previous">Précédent</a>
+          {% else %}
+          <p class="pagination-previous">Précédent</p>
+          {% endif %}
+
+          {% if articles.length > 1 %}
+          <a href="/?index={{ index + 1 }}&searchTerm={{ searchTerm }}" class="pagination-next">Suivant</a>
+          {% endif %}
+        </nav>
       </section>
+
       <section class="column is-offset-2">
         <h2 class="title is-3">Tags populaires</h2>
         <div class="tags">
