@@ -26,7 +26,7 @@
 
             <div class="level">
                 <div class="level-left">
-                    <time class="has-text-weight-bold">{{ article.createdAt | date }}</time>
+                    <time class="has-text-weight-bold">{{ article.createdAt | date("d/m/Y H:i") }}</time>
                 </div>
                 <div class="level-right">
                     <a class="button is-dark" href="/article/view/{{ article.slug }}">Voir l'article</a>

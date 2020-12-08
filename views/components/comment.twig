@@ -3,7 +3,7 @@
         <div class="content has-text-justified">
             <p class="">
                 <strong>{{ comment.author.firstName }} {{ comment.author.lastName }}</strong>
-                <small>{{ comment.createdAt | date }}</small>
+                <small>{{ comment.createdAt | date("d/m/Y H:i") }}</small>
                 <br>
                 {{ comment.content }}
             </p>
