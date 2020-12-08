@@ -61,7 +61,9 @@ router.post('/write',
         if(user){
             const article = new Article();
 
-            article.title = req.body['article-write-title'];
+            article.title = req.body['article-write-title'].replace(/^\w/, function(c) {
+                return c.toUpperCase();
+            });
             article.content = req.body['article-write-content'];
             article.shortDescription = req.body['article-write-short-description']
             article.tags = req.body['article-write-tags'];
@@ -110,7 +112,9 @@ router.post('/edit/:slug', async function(req, res, next) {
     const article = await Article.findOne({slug: req.params.slug}).populate('author');
     if (article){
         if (article.author.userName === req.session.userName) {
-            article.title = req.body['article-write-title'];
+            article.title = req.body['article-write-title'].replace(/^\w/, function(c) {
+                return c.toUpperCase();
+            });
             article.content = req.body['article-write-content'];
             article.shortDescription = req.body['article-write-short-description']
             article.tags = req.body['article-write-tags'];

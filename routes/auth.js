@@ -62,9 +62,13 @@ router.post('/register',
 
     const user = new User();
 
-    user.userName = req.body['register-username'];
-    user.firstName = req.body['register-first-name'];
-    user.lastName = req.body['register-last-name'];
+    user.userName = req.body['register-username']
+    user.firstName = req.body['register-first-name'].replace(/^\w/, function(c) {
+        return c.toUpperCase();
+    });
+    user.lastName = req.body['register-last-name'].replace(/^\w/, function(c) {
+        return c.toUpperCase();
+    });
     user.email = req.body['register-email'];
 
     // Hash the password before saving the user
