@@ -11,8 +11,6 @@ const { body, validationResult } = require('express-validator');
 
 /* GET view page. */
 router.get('/view/:slug', async function(req, res, next) {
-    console.log('userName')
-    console.log(req.session.userName)
     const article = await Article.findOne({slug: req.params.slug}).populate('author').populate('comments.author');
     if (article){
         const converter = new showdown.Converter();
@@ -20,62 +18,12 @@ router.get('/view/:slug', async function(req, res, next) {
         res.render('article/article_view', {
             userName: req.session.userName,
             article: article,
-            commentErrorMessage: req.query.commentErrorMessage
+            commentErrorMessage: req.query.commentErrorMessage,
+            session: req.session
         });
     } else {
         next(createError(404));
     }
-});
-
-/* POST view page. */
-router.post('/comment/:slug',
-    [
-        body('comment-write-content').notEmpty().withMessage("Le commentaire ne peut être vide")
-    ],
-    async function(req, res, next) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            res.redirect(`/article/view/${req.params.slug}?commentErrorMessage=${errors.array()[0].msg}`);
-            return;
-        }
-
-        const article = await Article.findOne({slug: req.params.slug});
-        if (article){
-            User.findOne({userName: req.session.userName}, (err, user) => {
-                if (user){
-                    article.comments.push({content: req.body['comment-write-content'], author: user});
-                    article.save();
-                }
-            });
-        }
-        res.redirect(`/article/view/${req.params.slug}`);
-});
-
-/* POST view page. */
-router.post('/reaction/:slug', async function(req, res, next) {
-    const reactions = ['heart_eyes', 'joy', 'smile', 'face_with_raised_eyebrow', 'cry', 'angry'];
-    const reaction = req.body['reaction-write-content'];
-
-    if (reactions.find((e) => e === reaction)) {
-        const article = await Article.findOne({slug: req.params.slug});
-        if (article){
-            User.findOne({userName: req.session.userName}, (err, user) => {
-                if (user){
-                    const previousReactionIndex = article.reactions.findIndex((e) => {
-                        return  e.author.toString() === user['_id'].toString();
-                    });
-                    if (previousReactionIndex >= 0) {
-                        article.reactions.splice(previousReactionIndex, 1);
-                    }
-
-                    article.reactions.push({content: reaction, author: user});
-                    article.save();
-                }
-            });
-        }
-    }
-
-    res.redirect(`/article/view/${req.params.slug}`);
 });
 
 /* GET write page. */
@@ -131,6 +79,114 @@ router.post('/write',
 
         res.redirect('/article/write');
     })
+});
+
+/* GET edit page. */
+router.get('/edit/:slug', async function(req, res, next) {
+    const article = await Article.findOne({slug: req.params.slug}).populate('author');
+    if (article){
+        if (article.author.userName === req.session.userName) {
+            const body = {
+                "article-write-title": article.title,
+                "article-write-content": article.content,
+                "article-write-short-description": article.shortDescription,
+                "article-write-tags": article.tags,
+                slug: req.params.slug
+            }
+            res.render('article/article_write', {
+                userName: req.session.userName,
+                body: body
+            })
+        } else {
+            res.redirect(`/article/view/${req.params.slug}`);
+        }
+    } else {
+        next(createError(404));
+    }
+});
+
+/* POST edit page. */
+router.post('/edit/:slug', async function(req, res, next) {
+    const article = await Article.findOne({slug: req.params.slug}).populate('author');
+    if (article){
+        if (article.author.userName === req.session.userName) {
+            article.title = req.body['article-write-title'];
+            article.content = req.body['article-write-content'];
+            article.shortDescription = req.body['article-write-short-description']
+            article.tags = req.body['article-write-tags'];
+
+            await article.save();
+        }
+        res.redirect(`/article/view/${req.params.slug}`);
+    } else {
+        next(createError(404));
+    }
+});
+
+/* get delete page. */
+router.get('/delete/:slug', async function(req, res, next) {
+    const article = await Article.findOne({slug: req.params.slug}).populate('author');
+    if (article){
+        if (article.author.userName === req.session.userName) {
+            await Article.deleteOne({slug: req.params.slug})
+            res.redirect(`/`);
+        } else {
+            res.redirect(`/article/view/${req.params.slug}`);
+        }
+    } else {
+        next(createError(404));
+    }
+});
+
+/* POST comment. */
+router.post('/comment/:slug',
+    [
+        body('comment-write-content').notEmpty().withMessage("Le commentaire ne peut être vide")
+    ],
+    async function(req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.redirect(`/article/view/${req.params.slug}?commentErrorMessage=${errors.array()[0].msg}`);
+            return;
+        }
+
+        const article = await Article.findOne({slug: req.params.slug});
+        if (article){
+            User.findOne({userName: req.session.userName}, (err, user) => {
+                if (user){
+                    article.comments.push({content: req.body['comment-write-content'], author: user});
+                    article.save();
+                }
+            });
+        }
+        res.redirect(`/article/view/${req.params.slug}`);
+    });
+
+/* POST reaction. */
+router.post('/reaction/:slug', async function(req, res, next) {
+    const reactions = ['heart_eyes', 'joy', 'smile', 'face_with_raised_eyebrow', 'cry', 'angry'];
+    const reaction = req.body['reaction-write-content'];
+
+    if (reactions.find((e) => e === reaction)) {
+        const article = await Article.findOne({slug: req.params.slug});
+        if (article){
+            User.findOne({userName: req.session.userName}, (err, user) => {
+                if (user){
+                    const previousReactionIndex = article.reactions.findIndex((e) => {
+                        return  e.author.toString() === user['_id'].toString();
+                    });
+                    if (previousReactionIndex >= 0) {
+                        article.reactions.splice(previousReactionIndex, 1);
+                    }
+
+                    article.reactions.push({content: reaction, author: user});
+                    article.save();
+                }
+            });
+        }
+    }
+
+    res.redirect(`/article/view/${req.params.slug}`);
 });
 
 module.exports = router;

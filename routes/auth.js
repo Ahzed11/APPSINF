@@ -7,7 +7,6 @@ const router = express.Router();
 
 /* GET auth page. */
 router.get('/', (req, res) => {
-    console.log(req.session.userName);
     res.render('auth', {userName: req.session.userName});
 });
 

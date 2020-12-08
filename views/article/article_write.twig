@@ -9,8 +9,13 @@
   <div class="container mt-6">
     <div class="columns">
       <section class="column is-6 is-offset-3">
+        {% if body.slug == null %}
         <h1 class="title is-3 has-text-centered">Écrire un article</h1>
         <form method="post" action="/article/write">
+        {% else %}
+          <h1 class="title is-3 has-text-centered">Éditer un article</h1>
+          <form method="post" action="/article/edit/{{ body.slug }}">
+        {% endif %}
           <div class="field">
             <label class="label">Titre</label>
             <div class="control has-icons-left">

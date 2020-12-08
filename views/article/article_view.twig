@@ -1,5 +1,10 @@
 {% extends 'layout.twig' %}
 
+{% block header %}
+  {{ parent }}
+  <link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
+{% endblock %}
+
 {% block body %}
   <div class="container mt-6">
     <div class="columns">
@@ -178,6 +183,25 @@
           </section>
        {% endif %}
       </section>
+      {% if article.author.userName == session.userName %}
+      <section class="column is-offset-1 is-3">
+        <div class="box">
+          <h2 class="title is-3">Pannel créateur</h2>
+          <a href="/article/edit/{{ article.slug }}" class="button is-dark">
+            <span class="icon">
+              <i class="fas fa-pen"></i>
+            </span>
+            <span>Éditer</span>
+          </a>
+          <a href="/article/delete/{{ article.slug }}" class="button is-danger">
+            <span class="icon">
+              <i class="fas fa-trash"></i>
+            </span>
+            <span>Supprimer</span>
+          </a>
+        </div>
+      </section>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
