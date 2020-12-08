@@ -16,6 +16,9 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'twig');
 
+// static
+app.use("/static", express.static(path.join(__dirname, 'static')));
+
 app.use(session({
   secret: '!ChangeMe!',
   resave: true,
