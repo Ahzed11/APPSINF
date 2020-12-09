@@ -25,7 +25,7 @@
             <div class="level-right">
               <div class="tags">
                 {% for tag in article.tags | split(',') %}
-                <span class="tag">{{ tag }}</span>
+                  <a href="/?searchTerm={{ tag }}" class="tag">{{ tag }}</a>
                 {% endfor %}
               </div>
             </div>
@@ -185,7 +185,6 @@
       </section>
       {% if article.author.userName == session.userName %}
       <section class="column is-offset-1 is-3">
-        <div class="box">
           <h2 class="title is-3">Pannel créateur</h2>
           <a href="/article/edit/{{ article.slug }}" class="button is-dark">
             <span class="icon">
@@ -199,7 +198,6 @@
             </span>
             <span>Supprimer</span>
           </a>
-        </div>
       </section>
       {% endif %}
     </div>

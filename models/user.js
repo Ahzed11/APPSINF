@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Article = require('./article');
 
 const userSchema = new mongoose.Schema({
     userName: {
@@ -18,7 +19,11 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-    }
+    },
+    articles: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Article'
+    }]
 });
 
 const User = mongoose.model('User', userSchema);

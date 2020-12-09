@@ -26,6 +26,53 @@ router.get('/view/:slug', async function(req, res, next) {
     }
 });
 
+/* GET mine page. */
+router.get('/mine', async function(req, res, next) {
+    if (!req.session.userName) {
+        res.redirect('/');
+        return;
+    }
+
+    const index = !req.query.index || req.query.index < 0 ? 0 : req.query.index;
+
+    const articles = await Article.aggregate([
+        {
+            $lookup: {
+                "from": User.collection.name,
+                "localField": "author",
+                "foreignField": "_id",
+                "as": "user"
+            }
+        },
+        { "$unwind": "$user" },
+        {
+            $match: { 'user.userName': req.session.userName }
+        },
+        {
+            $project: {
+                "title": 1,
+                "shortDescription": 1,
+                "tags": 1,
+                "author": "$user",
+                "createdAt": 1,
+                "slug": 1,
+            }
+        },
+        { $skip: index * 8 },
+        { $limit: 8 },
+    ]);
+
+    if (articles){
+        res.render('article/mine', {
+            userName: req.session.userName,
+            articles: articles,
+            index: index
+        });
+    } else {
+        res.redirect('/auth');
+    }
+});
+
 /* GET write page. */
 router.get('/write', function(req, res, next) {
     if (req.session.userName){
@@ -69,12 +116,15 @@ router.post('/write',
             article.tags = req.body['article-write-tags'];
 
             const slug = `${req.body['article-write-title']}${createUUID()}`.toLowerCase()
-                .replace('/\s/g', '-');
+                .replace(/\s/g, '-');
             article.slug = slug;
             article.author = user;
 
             article.save().then(() => {
-                res.redirect(`/article/view/${slug}`);
+                user.articles.push(article['_id']);
+                user.save().then(() => {
+                    res.redirect(`/article/view/${slug}`);
+                })
             });
             return;
         }

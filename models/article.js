@@ -33,7 +33,7 @@ const articleSchema = new mongoose.Schema({
     reactions: [Reaction],
 });
 
-articleSchema.index({title: 'text', tags: 'text', shortDescription: 'text'});
+articleSchema.index({title: 'text', tags: 'text'});
 
 const Article = mongoose.model('Article', articleSchema);
 
