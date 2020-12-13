@@ -3,7 +3,6 @@ const router = express.Router();
 const User = require('../models/user');
 const Article = require('../models/article');
 const Comment = require('../schemas/comment');
-const createUUID = require('../helpers/createUUID');
 const createError = require("http-errors");
 const showdown = require('showdown');
 const { body, validationResult } = require('express-validator');
@@ -113,9 +112,9 @@ router.post('/write',
             });
             article.content = req.body['article-write-content'];
             article.shortDescription = req.body['article-write-short-description']
-            article.tags = req.body['article-write-tags'];
+            article.tags = req.body['article-write-tags'].toLowerCase();
 
-            const slug = `${req.body['article-write-title']}${createUUID()}`.toLowerCase()
+            const slug = `${user.userName}-${req.body['article-write-title']}-${Date.now()}`.toLowerCase()
                 .replace(/\s/g, '-');
             article.slug = slug;
             article.author = user;
@@ -169,7 +168,11 @@ router.post('/edit/:slug', async function(req, res, next) {
             article.shortDescription = req.body['article-write-short-description']
             article.tags = req.body['article-write-tags'];
 
-            await article.save();
+            try {
+                await article.save();
+            } catch (e) {
+                console.log(e);
+            }
         }
         res.redirect(`/article/view/${req.params.slug}`);
     } else {
@@ -209,15 +212,25 @@ router.post('/comment/:slug',
             User.findOne({userName: req.session.userName}, (err, user) => {
                 if (user){
                     article.comments.push({content: req.body['comment-write-content'], author: user});
-                    article.save();
+                    try {
+                        article.save(() => {
+                            res.redirect(`/article/view/${req.params.slug}`);
+                        });
+                    } catch (e) {
+                        console.log(e);
+                    }
+                } else {
+                    res.redirect(`/article/view/${req.params.slug}`);
                 }
             });
+        } else {
+            res.redirect(`/article/view/${req.params.slug}`);
         }
-        res.redirect(`/article/view/${req.params.slug}`);
     });
 
 /* POST reaction. */
 router.post('/reaction/:slug', async function(req, res, next) {
+    let isSuccess = false;
     const reactions = ['heart_eyes', 'joy', 'smile', 'face_with_raised_eyebrow', 'cry', 'angry'];
     const reaction = req.body['reaction-write-content'];
 
@@ -234,13 +247,19 @@ router.post('/reaction/:slug', async function(req, res, next) {
                     }
 
                     article.reactions.push({content: reaction, author: user});
-                    article.save();
+                    article.save(() => {
+                        res.redirect(`/article/view/${req.params.slug}`);
+                    });
+                } else {
+                    res.redirect(`/article/view/${req.params.slug}`);
                 }
             });
+        } else {
+            res.redirect(`/article/view/${req.params.slug}`);
         }
+    } else {
+        res.redirect(`/article/view/${req.params.slug}`);
     }
-
-    res.redirect(`/article/view/${req.params.slug}`);
 });
 
 module.exports = router;
