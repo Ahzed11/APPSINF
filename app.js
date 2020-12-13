@@ -20,7 +20,7 @@ app.set('view engine', 'twig');
 app.use("/static", express.static(path.join(__dirname, 'static')));
 
 app.use(session({
-  secret: '!ChangeMe!',
+  secret: process.env.SESSION_SECRET || '!ChangeMe!',
   resave: true,
   saveUninitialized: true
 }));
@@ -37,8 +37,6 @@ const db = mongoose.connection;
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/article', articleRouter);
-
-//TODO: HTTPS
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
