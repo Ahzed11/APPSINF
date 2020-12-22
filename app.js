@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const mongoPath = process.env.MONGO_PATH;
+const mongoPath = process.env.MONGO_PATH || 'mongodb://localhost/appsinf-articles';
 mongoose.connect(mongoPath, { useNewUrlParser: true });
 const db = mongoose.connection;
 
