@@ -18,7 +18,7 @@ Introduction du projet d'approfondissement en sciences informatiques (UCL). <br/
     # Le port sur lequel sera exposé le site
     PORT=3000
     
-    # Le secret de la sesssion - String similaire à un mot de passe puissant conseilé
+    # Le secret de la sesssion - String similaire à un mot de passe puissant conseillée
     SESSION_SECRET=!CHANGEME!
     
     # Le chemin de connexion vers MongoDB
