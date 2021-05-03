@@ -1,6 +1,6 @@
 # APPSINF
-Introduction du projet d'approfondissement en sciences informatiques (UCL). <br/>
-[Lien du répertoire Github](https://github.com/Ahzed11/APPSINF)
+Projet d'approfondissement en sciences informatiques (UCL). <br/>
+Pas fini !
 
 ## Prérequis
 - Node Package Manager (NPM)
